@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="normal/base::layout(~{::section})">
+<head>
+    <meta charset="UTF-8">
+    <title>This is About page</title>
+</head>
+<body>
+<section>
+    <div class="card mr-3">
+        <div class="card-body">
+            <h1 class="text-center">Your Contact</h1>
+            <table class="table">
+                <thead>
+                <tr style="color:white; background-color: black">
+                    <th scope="col">#Id</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Phone</th>
+                    <th scope="col">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="c: ${contacts}">
+                    <td th:text="${'SMC-USER-'+c.cId}"></td>
+                    <td >
+                        <a href="" th:href="@{'/user/contact/'+${c.cId}}"> <img src="" th:src="@{'/IMG/'+${c.image}}" class="my_profile_picture" alt="Profile Photo"></a>
+                        <span th:text="${c.name}"> </span>
+                    </td>
+                    <td>
+                        <span th:text="${c.email}"></span>
+                    </td>
+                    <td th:text="${c.phone}"></td>
+                    <td>
+
+                    <button  data-bs-toggle="modal" data-bs-target="#staticBackdrop" class="btn btn-danger btn-sm">Delete</button>
+<!--                        <a th:onclick="alertMethod()" href="#" class="btn btn-danger btn-sm">Delete</a>-->
+
+                        <form th:action="@{'/user/update-contact/'+${c.cId}}" method="post" style="display:inline">
+                        <button type="submit"  class="btn btn-primary btn-sm">Update</button>
+                        </form>
+                    </td>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="staticBackdropLabel">Delete</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+
+                                    <p>Do You Really Want to Delete This ?</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <button th:onclick="|deleteContact(${c.cId})|" type="button" class="btn btn-danger">Delete</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </tr>
+                </tbody>
+            </table>
+
+            <form action="" th:action="@{'/user/show-contacts/0/10'}" method="get"  name="">
+                <label> Select Number of contacts to show </label>
+                <select name="pageSize">
+                    <option value="3"> 3
+                    </option>
+                    <option value="5"> 5
+                    </option>
+                    <option value="7"> 7
+                    </option>
+                    <option value="10" > 10
+                    </option>
+                </select>
+
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <li class="page-item" th:if="${currentPage != 0}">
+                            <a class="page-link" href="#" aria-label="Previous" th:href="'/user/show-contacts/'+${currentPage-1}+'/'+${pageSize}">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+
+                        <li th:classappend="${currentPage==i-1}?'active':''" th:each="i : ${#numbers.sequence(1,totalPage)}" class="page-item"><a th:href="'/user/show-contacts/'+${i-1}+'/'+${pageSize}" class="page-link" href="#"><span th:text="${i}"></span></a></li>
+
+                        <li class="page-item" th:if="${currentPage+1 != totalPage}">
+
+                            <a class="page-link" href="#" aria-label="Next" th:href="'/user/show-contacts/'+${currentPage+1}+'/'+${pageSize}">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                <button type="submit">submit</button>
+            </form>
+<!--            pagination-->
+
+
+        </div>
+    </div>
+
+
+
+</section>
+</body>
+</html>
